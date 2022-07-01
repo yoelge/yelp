@@ -16,20 +16,19 @@ git clone https://github.com/yoelge/yelp.git
 ```
 
 ## Proxy
-First you should run the proxy, so in first terminal window run:
+First you should run the proxy, so in first terminal window make sure you nevigate to the root dolder (cd yelp) then run:
 
 ```bash
-cd yelp
+
 cd proxy
 npm install
 npm start
 ```
 
 ## Yelp UI
-After Proxy is runing, in a second terminal window run:
+After Proxy is runing, in a second terminal window make sure you nevigate to the root dolder (cd yelp) then run:
 
 ```bash
-cd yelp
 npm install
 npm run dev
 ```

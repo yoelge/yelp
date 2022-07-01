@@ -32,3 +32,5 @@ After Proxy is runing, in a second terminal window make sure you nevigate to the
 npm install
 npm run dev
 ```
+
+see the interface at http://localhost:3000

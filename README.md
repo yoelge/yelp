@@ -22,7 +22,7 @@ First you should run the proxy, so in first terminal window run:
 cd yelp
 cd proxy
 npm install
-npm run dev
+npm start
 ```
 
 ## Yelp UI
@@ -31,5 +31,5 @@ After Proxy is runing, in a second terminal window run:
 ```bash
 cd yelp
 npm install
-npm start
+npm run dev
 ```

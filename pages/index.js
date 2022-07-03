@@ -2,10 +2,11 @@ import businessService from "../services/BusinessService"
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
-import { Badge, TextField } from '@mui/material';
+import { Badge } from '@mui/material';
 import React, { useState } from 'react';
 import { experimentalStyled as styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
+import SearchBar from '../components/SearchBar';
 import BusinessesGrid from '../components/BusinessesGrid';
 
 export async function getServerSideProps() {
@@ -127,18 +128,17 @@ export default function Home({ initialBusinesses }) {
           </Tabs>
         </Box>
         <TabPanel value={value} index={0}>
-          <TextField id="outlined-basic" label="Term" variant="outlined" defaultValue={category} style={{ width: 397, marginRight: 10 }} onBlur={handleCategoryChange} onKeyDown={handleCategoryKeyDown} />
-          <TextField id="outlined-basic" label="Location" variant="outlined" defaultValue={location} style={{ width: 397 }} onBlur={handleLocationChange} onKeyDown={handleLocationKeyDown} />
-          <BusinessesGrid
-            businesses={businesses}
-            onToggleFav={handleToggleFav}
-          />
+          <SearchBar 
+            defaultCategory={category}
+            defaultLocation={location}
+            onCategoryBlur={handleCategoryChange} 
+            onCategoryKeyDown={handleCategoryKeyDown} 
+            onLocationBlur={handleLocationChange} 
+            onLocationKeyDown={handleLocationKeyDown}  />
+          <BusinessesGrid businesses={businesses} onToggleFav={handleToggleFav} />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <BusinessesGrid
-            businesses={favBusiness}
-            onToggleFav={handleToggleFav}
-          />
+          <BusinessesGrid businesses={favBusiness}onToggleFav={handleToggleFav} />
         </TabPanel>
       </Box>
     </div>

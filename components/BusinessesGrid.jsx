@@ -6,13 +6,13 @@ import businessService from "../services/BusinessService"
 function BusinessesGrid({ businesses, onToggleFav }) {
 
   return (
-    <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 3, sm: 8, md: 12 }} style={{ marginTop: 10 }}>
+    <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 3, sm: 8, md: 12 }}>
       {businesses.map((elem) => (
         <Grid item xs={2} sm={3} md={3} key={businesses.indexOf(elem)}>
           <Card>
-            <div className="header" style={{ background: 'url(background.jpg) no-repeat', height: 214, Width: 328, backgroundSize: '100% 100%' }}>
+            <div className="business-header" style={{ height: 214, Width: 328 }}>
               <div className={businessService.isFav(elem.id) ? "fav-wrapper-active" : "fav-wrapper-inactive"}>
-                <IconButton aria-label="delete" onClick={() => { onToggleFav(elem.id); }}>
+                <IconButton aria-label="fav" onClick={() => { onToggleFav(elem.id); }}>
                   <StarOutlineIcon className={businessService.isFav(elem.id) ? "fav-active" : "fav-inactive"} />
                 </IconButton>
               </div>

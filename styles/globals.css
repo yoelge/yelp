@@ -111,8 +111,10 @@ a {
 
 }
 
-.header {
+.business-header {
   position: relative;
+  background: url(background.jpg) no-repeat;
+  background-size: 100% 100%;
 }
 
 .fav-inactive {
@@ -137,4 +139,9 @@ a {
   top: 3%;
   border-radius: 50%;
   background: #0D59D6;
+}
+
+.search-field {
+  width: 397 important!;
+  margin-bottom: 10 important!;
 }

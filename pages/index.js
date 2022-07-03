@@ -4,16 +4,11 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import { Badge } from '@mui/material';
 import React, { useState } from 'react';
-import { experimentalStyled as styled } from '@mui/material/styles';
-import Paper from '@mui/material/Paper';
 import SearchBar from '../components/SearchBar';
 import BusinessesGrid from '../components/BusinessesGrid';
 
 export async function getServerSideProps() {
-
-
   const business = await businessService.getBusiness("miami", "pizza");
-
   console.log(business);
   return {
     props: {
@@ -42,14 +37,6 @@ function TabPanel(props) {
   );
 }
 
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  ...theme.typography.body2,
-  padding: theme.spacing(2),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-}));
-
 function a11yProps(index) {
   return {
     id: `simple-tab-${index}`,
@@ -57,13 +44,7 @@ function a11yProps(index) {
   };
 }
 
-function favCount(businesses) {
 
-  var favBusiness = businesses.filter(function (value, index, businesses) {
-    return businessService.isFav(value.id);
-  });
-  return favBusiness.length;
-}
 
 export default function Home({ initialBusinesses }) {
 
@@ -71,18 +52,28 @@ export default function Home({ initialBusinesses }) {
   const [favCounts, setFavCounts] = React.useState(0);
   const [location, setLocation] = React.useState("miami");
   const [category, setCategory] = React.useState("pizza");
-  const [value, setValue] = React.useState(0);
+  const [currentTab, setCurrentTab] = React.useState(0);
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
+  const handleTabChange = (event, newTabValue) => {
+    setCurrentTab(newTabValue);
   };
 
   const handleToggleFav = (businessId) => {
     businessService.togglefav(businessId);
-    var newFavCounts = businessService.favCount();
+    updateFavCount(businesses);
+  };
+
+  const updateFavCount = (businesses) => {
+    var newFavCounts = favCount(businesses);
     setFavCounts(newFavCounts);
   };
 
+  const favCount = (businesses) => {
+    var favBusiness = businesses.filter(function (value, index, businesses) {
+      return businessService.isFav(value.id);
+    });
+    return favBusiness.length;
+  }
 
   const handleLocationKeyDown = async (event) => {
     if (event.keyCode == 13) {
@@ -91,12 +82,11 @@ export default function Home({ initialBusinesses }) {
   };
 
   const handleLocationChange = async (event) => {
-
     var newLocation = event.target.value;
     var newBusinesses = await businessService.getBusiness(newLocation, category);
     setLocation(newLocation);
     setBusinesses(newBusinesses);
-
+    updateFavCount(newBusinesses);
   };
 
   const handleCategoryKeyDown = async (event) => {
@@ -106,15 +96,14 @@ export default function Home({ initialBusinesses }) {
   };
 
   const handleCategoryChange = async (event) => {
-
     var newCategory = event.target.value;
     var newBusinesses = await businessService.getBusiness(location, newCategory);
     setCategory(newCategory);
     setBusinesses(newBusinesses);
-
+    updateFavCount(newBusinesses);
   };
 
-  var favBusiness = businesses.filter(function (business) {
+  const favBusiness = businesses.filter(function (business) {
     return businessService.isFav(business.id);
   });
 
@@ -122,23 +111,23 @@ export default function Home({ initialBusinesses }) {
     <div >
       <Box sx={{ width: '100%' }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" centered>
+          <Tabs value={currentTab} onChange={handleTabChange} aria-label="yelp app tabs" centered>
             <Tab label="Search" {...a11yProps(0)} />
-            <Tab label="Saved" {...a11yProps(1)} icon={<Badge badgeContent={favCount(businesses)} color="success" />} iconPosition="end" />
+            <Tab label="Saved" {...a11yProps(1)} icon={<Badge badgeContent={favCounts} color="success" />} iconPosition="end" />
           </Tabs>
         </Box>
-        <TabPanel value={value} index={0}>
-          <SearchBar 
+        <TabPanel value={currentTab} index={0}>
+          <SearchBar
             defaultCategory={category}
             defaultLocation={location}
-            onCategoryBlur={handleCategoryChange} 
-            onCategoryKeyDown={handleCategoryKeyDown} 
-            onLocationBlur={handleLocationChange} 
-            onLocationKeyDown={handleLocationKeyDown}  />
+            onCategoryBlur={handleCategoryChange}
+            onCategoryKeyDown={handleCategoryKeyDown}
+            onLocationBlur={handleLocationChange}
+            onLocationKeyDown={handleLocationKeyDown} />
           <BusinessesGrid businesses={businesses} onToggleFav={handleToggleFav} />
         </TabPanel>
-        <TabPanel value={value} index={1}>
-          <BusinessesGrid businesses={favBusiness}onToggleFav={handleToggleFav} />
+        <TabPanel value={currentTab} index={1}>
+          <BusinessesGrid businesses={favBusiness} onToggleFav={handleToggleFav} />
         </TabPanel>
       </Box>
     </div>

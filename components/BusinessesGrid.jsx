@@ -11,9 +11,9 @@ function BusinessesGrid({ businesses, onToggleFav }) {
         <Grid item xs={2} sm={3} md={3} key={businesses.indexOf(elem)}>
           <Card>
             <div className="business-header" style={{ height: 214, Width: 328 }}>
-              <div className={businessService.isFav(elem.id) ? "fav-wrapper-active" : "fav-wrapper-inactive"}>
-                <IconButton aria-label="fav" onClick={() => { onToggleFav(elem.id); }}>
-                  <StarOutlineIcon className={businessService.isFav(elem.id) ? "fav-active" : "fav-inactive"} />
+              <div className={businessService.isFavBusiness(elem.id) ? "fav-wrapper-active" : "fav-wrapper-inactive"}>
+                <IconButton aria-label="fav" onClick={() => { onToggleFav(elem); }}>
+                  <StarOutlineIcon className={businessService.isFavBusiness(elem.id) ? "fav-active" : "fav-inactive"} />
                 </IconButton>
               </div>
             </div>

@@ -44,8 +44,6 @@ function a11yProps(index) {
   };
 }
 
-
-
 export default function Home({ initialBusinesses }) {
 
   const [businesses, setBusinesses] = React.useState(initialBusinesses);
@@ -53,27 +51,23 @@ export default function Home({ initialBusinesses }) {
   const [location, setLocation] = React.useState("miami");
   const [category, setCategory] = React.useState("pizza");
   const [currentTab, setCurrentTab] = React.useState(0);
+  const [favBusinesses, setFavBusinesses] = React.useState([]);
 
   const handleTabChange = (event, newTabValue) => {
     setCurrentTab(newTabValue);
   };
 
-  const handleToggleFav = (businessId) => {
-    businessService.togglefav(businessId);
-    updateFavCount(businesses);
+  const handleToggleFav = (business) => {
+    businessService.togglefavBusiness(business);
+    var newFavBusinesses = businessService.favBusinesses;
+    setFavBusinesses(newFavBusinesses);
+    updateFavCount();
+
   };
 
   const updateFavCount = (businesses) => {
-    var newFavCounts = favCount(businesses);
-    setFavCounts(newFavCounts);
+    setFavCounts(businessService.favBusinesses.length);
   };
-
-  const favCount = (businesses) => {
-    var favBusiness = businesses.filter(function (value, index, businesses) {
-      return businessService.isFav(value.id);
-    });
-    return favBusiness.length;
-  }
 
   const handleLocationKeyDown = async (event) => {
     if (event.keyCode == 13) {
@@ -86,7 +80,6 @@ export default function Home({ initialBusinesses }) {
     var newBusinesses = await businessService.getBusiness(newLocation, category);
     setLocation(newLocation);
     setBusinesses(newBusinesses);
-    updateFavCount(newBusinesses);
   };
 
   const handleCategoryKeyDown = async (event) => {
@@ -100,12 +93,7 @@ export default function Home({ initialBusinesses }) {
     var newBusinesses = await businessService.getBusiness(location, newCategory);
     setCategory(newCategory);
     setBusinesses(newBusinesses);
-    updateFavCount(newBusinesses);
   };
-
-  const favBusiness = businesses.filter(function (business) {
-    return businessService.isFav(business.id);
-  });
 
   return (
     <div >
@@ -127,7 +115,7 @@ export default function Home({ initialBusinesses }) {
           <BusinessesGrid businesses={businesses} onToggleFav={handleToggleFav} />
         </TabPanel>
         <TabPanel value={currentTab} index={1}>
-          <BusinessesGrid businesses={favBusiness} onToggleFav={handleToggleFav} />
+          <BusinessesGrid businesses={favBusinesses} onToggleFav={handleToggleFav} />
         </TabPanel>
       </Box>
     </div>

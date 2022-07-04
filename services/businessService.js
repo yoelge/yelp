@@ -3,32 +3,33 @@ import { GraphQLClient, gql } from 'graphql-request'
 
 class BusinessService {
 
-    favs = [];
     businesses = [];
+    favBusinesses = [];
 
-    fav(businessId) {
-        if (!this.favs.includes(businessId)) {
-            this.favs.push(businessId);
+    favBusiness(business) {
+        if (this.favBusinesses.some(b => b.id === business.id)) {
+            return;
         }
+        this.favBusinesses.push(business);
     }
 
-    isFav(businessId) {
-        return this.favs.includes(businessId);
+    isFavBusiness(businessId) {
+        return this.favBusinesses.some(b => b.id === businessId);
     }
 
-    togglefav(businessId) {
-        if (this.favs.includes(businessId)) {
-            this.unFav(businessId);
+    togglefavBusiness(business) {
+        if (this.isFavBusiness(business.id)) {
+            this.unFavBusiness(business.id);
         }
         else {
-            this.fav(businessId);
+            this.favBusiness(business);
         }
     }
 
-    unFav(businessId) {
-        var oldFavs = this.favs;
-        this.favs = oldFavs.filter(function (value, index, oldFavs) {
-            return value != businessId;
+    unFavBusiness(businessId) {
+        var oldFavBusinesses = this.favBusinesses;
+        this.favBusinesses = oldFavBusinesses.filter(function (value, index, oldFavs) {
+            return value.id != businessId;
         });
     }
 
